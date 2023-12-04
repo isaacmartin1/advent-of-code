@@ -1,6 +1,6 @@
 const fs = require("fs")
 
-let lines = fs.readFileSync("input.csv", {encoding: "utf-8"}).split("\n")
+let lines = fs.readFileSync("real.csv", {encoding: "utf-8"}).split("\n")
 
 for (let i=0; i<lines.length; i++) {
     lines[i] = lines[i].slice(0,-1)
@@ -29,13 +29,6 @@ function main(lines) {
 
     console.log(masterNumber)
 }
-
-
-// search all the numbers
-// add them all together
-// subtract for each one that doesn't have a symbol near it
-// this avoids repeats
-
 
 function collectNumbers(line) {
     let numberString = ''
@@ -73,60 +66,46 @@ function collectAsterisks(line) {
 function evaluateAsteriskArray(allAsterisks, allNumbers) {
     let masterNumberFn = 0
     for (let t=0; t<allAsterisks.length; t++) {
-        // for every asterisk, check the numbers array above, on the level, and below for matches
-        // two number matches means the numbers found will be multiplied together and added to masterNumberFn
-        // find matches on row above
-        // allNumbers[t-1]
-        // find matches on row
-        // allNumbers[t]
-        // find matches on row below
-        // allNumbers[t+1]
         for (let n=0; n<allAsterisks[t].length; n++) {
-            // console.log(allAsterisks[t][n])
+            let totalNumberFound = 0
+            let contenderNumber = 0
             for (let c = t-1; c<=t+1; c++) {
-                let totalNumberFound = 0
-                let contenderNumber = 0
+                let foundMatch = false
+                // loop each row above, on, below
                 for (let b=0; b<allNumbers[c].length; b++) {
                     // allNumbers[c][b] is the individual number being evaluated here
-                    // console.log(allNumbers[c][b])
-                    let foundMatch = false
                     for (let a=0; a<allNumbers[c][b][1].length; a++) {
                         if (foundMatch === true) {break}
                         if (allAsterisks[t][n] === allNumbers[c][b][1][a] || allAsterisks[t][n]+1 === allNumbers[c][b][1][a] || allAsterisks[t][n]-1 === allNumbers[c][b][1][a]) {
-                            // console.log(allNumbers[c][b][1][a])
                             foundMatch = true
                         }
                     }
                     if (foundMatch === true) {
                         totalNumberFound += 1
                         if (totalNumberFound === 1) {
-                            // add actual value
                             contenderNumber += allNumbers[c][b][0]
+                            console.log(contenderNumber)
                         } else if (totalNumberFound === 2) {
-                            // multiply it in
                             contenderNumber = contenderNumber * allNumbers[c][b][0]
+                            console.log(contenderNumber)
                         } else {
                             contenderNumber = 0
-                            totalNumberFound = 0
                             break
                         }
                     }
                     foundMatch = false
                 }
-                if (totalNumberFound === 2) {
-                    console.log(contenderNumber)
-                    masterNumberFn += contenderNumber
-                    // console.log(masterNumberFn)
-                    totalNumberFound = 0
-                    contenderNumber = 0
-                }
             }
-
+            if (totalNumberFound === 2) {
+                masterNumberFn += contenderNumber
+                totalNumberFound = 0
+                contenderNumber = 0
+                foundMatch = false
+            }
         }
     }
     return masterNumberFn
 
 }
-
 
 masterNumber = main(lines)
