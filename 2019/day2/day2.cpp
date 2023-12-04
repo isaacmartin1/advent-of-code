@@ -13,6 +13,6 @@ int main () {
         }
     };
     inFile.close()
-    cout << "lmao bruh";
+    cout << "test";
     return 0;
 };
