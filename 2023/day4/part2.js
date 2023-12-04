@@ -56,7 +56,6 @@ function transformPointArray(pointArray) {
     return numOfCopies
 }
 
-
 function parseOnSpaces(inputString) {
     const validArray = []
     let candidateArray = inputString.split(/ /)

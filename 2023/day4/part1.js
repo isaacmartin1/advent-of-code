@@ -26,9 +26,7 @@ function getScore(parsedLines) {
     let totalPoints = 0
     for (let x=0; x<parsedLines.length; x++) {
         possibleScores = parseOnSpaces(parsedLines[x][1])
-        // console.log(possibleScores)
         numbersOnCard = parseOnSpaces(parsedLines[x][2])
-        // console.log(numbersOnCard)
         totalPointsPerLine = matchScores(possibleScores, numbersOnCard)
         console.log(totalPointsPerLine)
         totalPoints += totalPointsPerLine
