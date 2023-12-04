@@ -1,12 +1,10 @@
 const fs = require("fs")
-const { arrayBuffer } = require("stream/consumers")
 
 let lines = fs.readFileSync("input.txt", {encoding: "utf-8"}).split("\n")
 
 for (let i=0; i<lines.length; i++) {
     lines[i] = lines[i].slice(0,-1)
 }
-
 
 function part1(lines) {
     console.log(lines)
