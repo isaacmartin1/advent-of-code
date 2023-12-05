@@ -64,5 +64,4 @@ function fibonnaciScore(totalPointsPerLine) {
     }
 }
 
-
 masterNumber = main(lines)
