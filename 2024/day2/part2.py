@@ -65,6 +65,10 @@ def attempt_line(line):
 
 
 def evaluate_line(line):
+    result = attempt_line(line)
+    if result:
+        return True
+
     for i in range(len(line)):
         modified_line = remove_index(i, line)
         result = attempt_line(modified_line)
