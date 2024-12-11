@@ -1,1 +1,3 @@
-Repository for Advent of Code solutions. Years 2019 - 2023 in JS, year 2024 in Python.
+# Advent of Code
+
+Repository for advent of code answers.

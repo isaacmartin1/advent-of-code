@@ -17,7 +17,6 @@ def check_for_collision(guard_x, guard_y, direction, lines):
             return True
     elif direction == 'down':
         if lines[guard_y+1][guard_x] == '#':
-            print('collision')
             return True
     elif direction == 'right':
         if lines[guard_y][guard_x+1] == '#':
@@ -32,7 +31,6 @@ def check_for_ending(guard_x, guard_y, direction, lines):
     if direction == 'up' and guard_y-1 < 0:
         return True
     if direction == 'down' and guard_y+1 == len(lines)-1:
-        print('true found', guard_y+1, len(lines)-1)
         return True
     if direction == 'right' and guard_x+1 == len(lines[0])-1:
         return True
@@ -60,31 +58,44 @@ def move_guard(guard_x, guard_y, direction):
     if direction == 'left':
         return guard_x-1, guard_y
 
-def adjust_for_new_location(guard_x, guard_y, location_list):
-    if [guard_x, guard_y] not in location_list:
-        location_list.append([guard_x, guard_y])
-    return location_list
+def adjust_for_new_location(guard_x, guard_y, direction, location_list):
+    if [guard_x, guard_y, direction] not in location_list:
+        location_list.append([guard_x, guard_y, direction])
+        return location_list, False
+    else:
+        return location_list, True
 
-def get_guard_route(guard_x, guard_y, lines):
+def is_guard_loop_infinite(x, y, guard_x, guard_y, lines):
     # start moving up
+    lines[y] = lines[y][:x] + '#' + lines[y][x + 1:]
     direction = 'up'
     is_end_ahead = False
     location_list = []
-    lines[guard_y] = lines[guard_y][:guard_x] + 'X' + lines[guard_y][guard_x + 1:]
-    while is_end_ahead != True:
+    is_infinite = False
+    while (is_infinite == False) and (is_end_ahead != True):
         is_collision_ahead = check_for_collision(guard_x, guard_y, direction, lines)
         if is_collision_ahead:
             direction = turn_right(direction)
+
         is_end_ahead = check_for_ending(guard_x, guard_y, direction, lines)
 
-        print(guard_x, guard_y, direction)
 
         guard_x, guard_y = move_guard(guard_x, guard_y, direction)
-        lines[guard_y] = lines[guard_y][:guard_x] + 'X' + lines[guard_y][guard_x + 1:]
-        location_list = adjust_for_new_location(guard_x, guard_y, location_list)
 
+        location_list, is_infinite = adjust_for_new_location(guard_x, guard_y, direction, location_list)
+    return is_infinite
 
-    return len(location_list)
+def create_modded_lines(input_x, input_y, lines):
+    new_lines = []
+    for x in range(len(lines)):
+        new_string = lines[x]
+        if x == input_x:
+            string_list = list(new_string)
+            string_list[input_y] = '#'
+            new_string = "".join(string_list)
+        new_lines.append(new_string)
+    return new_lines
+
 
 
 def main():
@@ -93,8 +104,17 @@ def main():
 
     # given: guard is facing up
     guard_x, guard_y = get_guard_position(lines)
-    total = get_guard_route(guard_x, guard_y, lines)
-    answer = total
+    for x in range(len(lines)):
+        for y in range(len(lines[x])):
+            if x == guard_x and y == guard_y:
+                continue
+            if lines[y][x] == '#':
+                continue
+            modded_lines = create_modded_lines(x, y, lines)
+            is_infinite = is_guard_loop_infinite(x, y, guard_x, guard_y, modded_lines)
+            if is_infinite:
+                print('y', x, 'x', y)
+                answer += 1
 
 
     return answer
@@ -103,4 +123,3 @@ def main():
 answer = main()
 
 print(answer)
-
