@@ -25,12 +25,18 @@ def apply_rules(line):
 
 def main():
     line = read_file()[0].split()
+    answer = 0
     i = 0
-    while i < 75:
-        line = apply_rules(line)
-        print(f'processing {i}')
-        i += 1
-    return len(line)
+    for x in line:
+        x = [x]
+        while i < 25:
+            x = apply_rules(x)
+            print(f'processing {i}')
+            i += 1
+        i = 0
+        print(x)
+        answer += len(x)
+    return answer
 
 
 answer = main()
