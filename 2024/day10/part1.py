@@ -14,14 +14,12 @@ def clean_lines(lines):
 
 
 def find_all_trails(y, x, lines, target_number, terminal_list):
-
     for [x, y] in [[x-1, y], [x+1, y], [x, y-1], [x, y+1]]:
         if 0 <= x < len(lines[0]) and 0 <= y < len(lines):
             if lines[y][x] == target_number:
                 if target_number == 9 and [x, y] not in terminal_list:
                     terminal_list.append([x, y])
                     print(f"terminal at x: {x} y: {y}")
-                    return terminal_list
                 terminal_list = find_all_trails(y, x, lines, target_number+1, terminal_list)
 
     return terminal_list
