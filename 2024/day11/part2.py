@@ -1,41 +1,55 @@
 import time
 start = time.perf_counter()
+from collections import defaultdict
 
 
 def read_file():
     with open("input.csv", encoding="utf-8") as file:
-        lines = file.read().split("\n")
-        return lines
+        initial_list = file.read().split("\n")[0]
+
+        dict = {}
+        for x in initial_list.split():
+            if x != ' ':
+                dict[x] = 1
+        return dict
 
 
-def apply_rules(line):
-    transformed_line = []
-    for x in line:
-        int_x = int(x)
-        len_x = len(x)
-        if int_x == 0:
-            transformed_line.append(str(1))
-        elif len_x % 2 == 0:
-            transformed_line.append(str(int(x[:len_x//2])))
-            transformed_line.append(str(int(x[len_x//2:])))
-        else:
-            transformed_line.append(str(int_x*2024))
-    return transformed_line
+def apply_rules(s):
+    int_s = int(s)
+    len_s = len(s)
+    if int_s == 0:
+        return [str(1)]
+    elif len_s % 2 == 0:
+        half = len(s)//2
+        return [str(int(s[:half])), str(int(s[half:]))]
+    else:
+        return[str(int_s*2024)]
+
+
+def get_new_dict(dict):
+    new_dict = {}
+    for stone, count in dict.items():
+        new_stones = apply_rules(stone)
+        for s in new_stones:
+            if s not in new_dict.keys():
+                new_dict[s] = count
+            else:
+                new_dict[s] += count
+    return new_dict
 
 
 def main():
-    line = read_file()[0].split()
+    dict = read_file()
+
     answer = 0
     i = 0
-    for x in line:
-        x = [x]
-        while i < 25:
-            x = apply_rules(x)
-            print(f'processing {i}')
-            i += 1
-        i = 0
-        print(x)
-        answer += len(x)
+    while i < 75:
+        dict = get_new_dict(dict)
+        print(f'processing {i}')
+        print(dict)
+        i += 1
+    for x in dict:
+        answer += dict[x]
     return answer
 
 
