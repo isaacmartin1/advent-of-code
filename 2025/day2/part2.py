@@ -9,15 +9,15 @@ def main():
     passwords = read_file(filename)[0].split(',')
     invalid_ids = []
     for p in passwords:
-        min, max = p.split('-')
-        min, max = int(min), int(max)
+        minimum, maximum = p.split('-')
+        minimum, maximum = int(minimum), int(maximum)
 
-        # max + 1 because range is [inclusive, exclusive)
-        for code in range(min, max + 1):
+        # maximum + 1 because range is [inclusive, exclusive)
+        for code in range(minimum, maximum + 1):
             str_code = str(code)
             identified_invalid_code = False
             for divider in range(2, len(str_code)+1):
-                if identified_invalid_code == True:
+                if identified_invalid_code:
                     continue
                 if len(str_code) % divider == 0:
                     code_list = []
