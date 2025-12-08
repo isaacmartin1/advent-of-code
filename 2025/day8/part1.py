@@ -6,7 +6,7 @@ def read_file(filename):
         return lines
     
 def main():
-    answer = 0
+    answer = 1
     filename = "input.csv"
     lines = read_file(filename)
     circuits = []
@@ -18,25 +18,24 @@ def main():
 
     iterations = 0
     junction_distances = []
-    
+    evaluated_pairs = set()
     for i in circuits:
         for j in circuits:
             iterations += 1
             if i == j:
                 continue
-            proposed_distance = ((i[0] - j[0])**2 + (i[1] - j[1])**2 + (i[2] - j[2])**2)**.5
-            proposed_junctions = [i, j]
-            if [proposed_distance, [i, j]] not in junction_distances and [proposed_distance, [j, i]] not in junction_distances:
-                print(proposed_distance)
+            if f"{i}{j}" not in evaluated_pairs and f"{j}{i}" not in evaluated_pairs:
+                proposed_distance = ((i[0] - j[0])**2 + (i[1] - j[1])**2 + (i[2] - j[2])**2)**.5
+                proposed_junctions = [i, j]
                 junction_distances.append([proposed_distance, proposed_junctions])
+                evaluated_pairs.add(f"{i}{j}")
 
     junction_distances.sort()
-
     i = 0
     final_circuits = []
     circuits_added = 0
     evaluated_pairs = []
-    while i <= 10:
+    while i < 1000:
         _, candidate_junctions = junction_distances[i]
 
         circuit_to_add_to = []
@@ -47,17 +46,8 @@ def main():
                 circuit = final_circuits[circuit_index]
                 for junction in circuit:
                     if new_junction == junction:
-                        circuit_to_add_to.append(circuit_index)
-
-        # import pdb
-        # pdb.set_trace()
-        print('-------')
-        print(circuit_to_add_to)
-        print(final_circuits)
-        print(candidate_junctions)
-
-        print('-------')
-
+                        if circuit_index not in circuit_to_add_to:
+                            circuit_to_add_to.append(circuit_index)
         if [junction_1, junction_2] in evaluated_pairs or [junction_2, junction_1] in evaluated_pairs:
             pass
         elif i == 0 or len(circuit_to_add_to) == 0:
@@ -75,7 +65,6 @@ def main():
         elif len(circuit_to_add_to) == 2:
             new_circuits = []
             combined_circuits = []
-            indexes_not_affected = []
             for index in range(len(final_circuits)):
                 if index not in circuit_to_add_to:
                     new_circuits.append(final_circuits[index])
@@ -90,17 +79,14 @@ def main():
             final_circuits = new_circuits
             circuits_added += 1
             evaluated_pairs.append(candidate_junctions)
-
-
         i += 1
 
     lengths = [len(x) for x in final_circuits]
+    lengths.sort(reverse=True)
+    for idx in range(3):
+        if idx <= len(lengths) - 1:
+            answer *= lengths[idx]
 
-    # consolidate
-
-
-    import pdb
-    pdb.set_trace()
     return answer
 
 answer = main()
