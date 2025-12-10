@@ -14,24 +14,15 @@ def main():
         list_of_coords.append([x_coord, y_coord])
 
     # get a list of largest area and assoc coords
-    largest_area = 0
     biggest_areas = []
-    largest_x = 0
-    largest_y = 0
     for x_coord_1, y_coord_1 in list_of_coords:
         for x_coord_2, y_coord_2 in list_of_coords:
             area = (abs(x_coord_1 - x_coord_2) + 1) * (abs(y_coord_1 - y_coord_2) + 1)
             biggest_areas.append([area, [[x_coord_1, y_coord_1], [x_coord_2, y_coord_2]]])
-            if x_coord_1 > largest_x:
-                largest_x = x_coord_1
-            if y_coord_1 > largest_y:
-                largest_y = y_coord_1
 
     biggest_areas.sort(reverse=True)
 
-
     perimeter = []
-
     for idx in range(len(list_of_coords)):
         if idx != len(list_of_coords) - 1:
             current_x, current_y = list_of_coords[idx]
@@ -58,7 +49,6 @@ def main():
 
         monitored_values = []
         for x_coord, y_coord in perimeter:
-
             if (x_coord == x_coord_1 and y_coord == y_coord_1) or (x_coord == x_coord_2 and y_coord == y_coord_2):
                 continue
             elif smaller_x < x_coord < larger_x and smaller_y < y_coord < larger_y:
