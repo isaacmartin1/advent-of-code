@@ -7,21 +7,19 @@ def main():
     answer = 0
     filename = "input.csv"
     lines = read_file(filename)
-    for bank in lines:
-        voltage = [int(x) for x in list(bank)]
-        while len(voltage) > 12:
-            removed_item = False
-            for battery_idx in range(len(voltage) - 1):
-                current_battery = voltage[battery_idx]
-                next_battery = voltage[battery_idx + 1]
-                if current_battery < next_battery:
-                    voltage.pop(battery_idx)
-                    removed_item = True
-                    break
-            if removed_item == False:
-                voltage = voltage[0:12]
 
-        answer += int("".join([str(x) for x in voltage]))
+    for bank in lines:
+        num_to_remove = len(bank) - 12
+        voltage = []
+
+        for battery in bank:
+            battery = int(battery)
+            while voltage and num_to_remove > 0 and voltage[-1] < battery:
+                voltage.pop()
+                num_to_remove -= 1
+            voltage.append(battery)
+
+        answer += int("".join([str(battery) for battery in voltage])[0:12])
 
     return answer
 
