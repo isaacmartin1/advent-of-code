@@ -1,3 +1,5 @@
+from z3 import *
+
 def read_file(filename):
     with open(filename, encoding="utf-8") as file:
         lines = [line for line in file.read().split("\n")]
@@ -23,7 +25,8 @@ def main():
             for index in [int(button) for button in buttons[button_set_idx]]:
                 current_line = current_line[:index] + '1' + current_line[index+1:]
             buttons[button_set_idx] = current_line
-
+        import pdb
+        pdb.set_trace()
         # GET possible combinations in ascending order
         combinations = []
         for num_presses in range(1, 1000):

@@ -48,7 +48,6 @@ def main():
             # HORIZONTAL LINE
             elif abs(next_x - current_x) > 0:
                 x_perimeter_min, x_perimeter_max = [next_x, current_x] if next_x < current_x else [current_x, next_x]
-                import pdb
                 if smaller_y < current_y < larger_y:
                     if x_perimeter_min < larger_x < x_perimeter_max or x_perimeter_min < smaller_x < x_perimeter_max:
                         is_found = False
