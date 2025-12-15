@@ -39,10 +39,6 @@ def main():
         if present_area <= area_available:
             answer += 1
 
-
-    # import pdb
-    # pdb.set_trace()
-
     return answer
 
 answer = main()
